@@ -9,7 +9,6 @@
 
 // PBXBuildContext
 - (void) setStringValue:(id)value forDynamicSetting:(id)setting;
-- (void) appendStringOrStringListValue:(id)value toDynamicSetting:(id)setting;
 - (id) expandedValueForString:(id)string;
 - (BOOL) expandedValueIsNonEmptyForString:(id)string;
 
@@ -61,8 +60,8 @@ static id callPBXApplicationProductTypeMethod(id self, SEL selector, id buildCon
 {
 	if ([buildContext expandedValueIsNonEmptyForString:@"$(INFOPLIST_FILE)"])
 	{
-		NSArray *sectcreate = [NSArray arrayWithObjects:@"-sectcreate", @"__TEXT", @"__info_plist", @"$(DERIVED_FILES_DIR)/$(INFOPLIST_PATH)", nil];
-		[buildContext appendStringOrStringListValue:sectcreate toDynamicSetting:@"OTHER_LDFLAGS"];
+		NSString *otherLdflags = [buildContext expandedValueForString:@"$(OTHER_LDFLAGS)"];
+		[buildContext setStringValue:[otherLdflags stringByAppendingString:@" -sectcreate __TEXT __info_plist $(DERIVED_FILES_DIR)/$(INFOPLIST_PATH)"] forDynamicSetting:@"OTHER_LDFLAGS"];
 	}
 	
 	id result = callPBXApplicationProductTypeMethod(self, _cmd, buildContext);
