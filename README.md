@@ -18,6 +18,6 @@ Limitations
 
 Because neither the Xcode plugin API nor Xcode internals are not documented, this plugin might break at anytime. To ensure that the plugin is still working, build and run the *dump_info_plist* projet.
 
-This plugin was tested with Xcode 3.1.4 on Mac OS X 10.5.8.
+This plugin was tested with Xcode 3.1.4 on Mac OS X 10.5.8 and Xcode 3.2.3 on Mac OS X 10.6.4.
 
 If you are not comfortable with the plugin, dupe [rdar #6646614](http://openradar.me/6646614) and cross your fingers because this is a duplicate of rdar #4722772 which was filed in 2006.
