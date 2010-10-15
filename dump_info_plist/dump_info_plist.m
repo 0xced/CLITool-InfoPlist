@@ -1,5 +1,6 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSData.h>
 #import <Foundation/NSString.h>
 #import <mach-o/getsect.h>
 #import <stdio.h>
@@ -15,8 +16,10 @@ int main (int argc, const char * argv[])
 		return 1;
 	}
 	
-	if (*((char*)__info_plist->addr) == '<')
-		printf("raw __info_plist section:\n-------------------------\n%s\n", __info_plist->addr);
+	NSData *plist = [NSData dataWithBytesNoCopy:(void*)__info_plist->addr length:__info_plist->size freeWhenDone:NO];
+	NSData *xmlSignature = [NSData dataWithBytesNoCopy:"<?xml" length:5 freeWhenDone:NO];
+	if ([[plist subdataWithRange:NSMakeRange(0, [xmlSignature length])] isEqualToData:xmlSignature])
+		printf("raw __info_plist section:\n-------------------------\n%s\n", [[[[NSString alloc] initWithData:plist encoding:NSUTF8StringEncoding] autorelease] UTF8String]);
 	else
 		printf("__info_plist section is binary encoded\n");
 	
