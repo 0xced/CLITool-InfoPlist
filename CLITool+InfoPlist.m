@@ -61,7 +61,8 @@ static id callPBXApplicationProductTypeMethod(id self, SEL selector, id buildCon
 	if ([buildContext expandedValueIsNonEmptyForString:@"$(INFOPLIST_FILE)"])
 	{
 		NSString *otherLdflags = [buildContext expandedValueForString:@"$(OTHER_LDFLAGS)"];
-		[buildContext setStringValue:[otherLdflags stringByAppendingString:@" -sectcreate __TEXT __info_plist $(DERIVED_FILES_DIR)/$(INFOPLIST_PATH)"] forDynamicSetting:@"OTHER_LDFLAGS"];
+		if ([otherLdflags rangeOfString:@"-sectcreate __TEXT __info_plist"].location == NSNotFound)
+			[buildContext setStringValue:[otherLdflags stringByAppendingString:@" -sectcreate __TEXT __info_plist $(DERIVED_FILES_DIR)/$(INFOPLIST_PATH)"] forDynamicSetting:@"OTHER_LDFLAGS"];
 	}
 	
 	id result = callPBXApplicationProductTypeMethod(self, _cmd, buildContext);
