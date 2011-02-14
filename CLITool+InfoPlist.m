@@ -143,14 +143,17 @@ static id callPBXApplicationProductTypeMethod(id self, SEL selector, id buildCon
 	
 	NSString *pluginName = [[[plugin bundlePath] lastPathComponent] stringByDeletingPathExtension];
 	NSString *version = [plugin objectForInfoDictionaryKey:@"CFBundleVersion"];
+	BOOL isXcode = [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.Xcode"];
 	if (success)
 	{
 		setenv("CLITOOL_INFOPLIST", [version UTF8String], 1);
-		NSLog(@"%@ %@ loaded successfully", pluginName, version);
+		if (isXcode)
+			NSLog(@"%@ %@ loaded successfully", pluginName, version);
 	}
 	else
 	{
-		NSLog(@"%@ %@ failed to load", pluginName, version);
+		if (isXcode)
+			NSLog(@"%@ %@ failed to load", pluginName, version);
 	}
 }
 
